@@ -22,7 +22,7 @@ const radiusScale = d3.scaleSqrt().range([0, 55]);
 ////55는 원하는 대로 바꿔도 됨
 const colorScale = d3
   .scaleOrdinal()
-  .range(["#ed00ca", "#ffabf3", "#c5d0ed", "#0709a6"]);
+  .range(["#ffabf3", "#c5d0ed", "#ed00ca", "#0709a6"]);
 
 // axis
 const xAxis = d3
@@ -49,6 +49,11 @@ let legendRects;
 let legendLabels;
 let xAxisText;
 let yAxisText;
+
+let europeSelected = false;
+let africaSelected = false;
+let usSelected = false;
+let singaporeSelected = false;
 
 d3.csv("data/gapminder_combined.csv").then((raw_data) => {
   data = raw_data.map((d) => {
@@ -80,7 +85,7 @@ d3.csv("data/gapminder_combined.csv").then((raw_data) => {
     .call(yAxis);
 
   circles = svg
-    .selectAll("cicles")
+    .selectAll("circles")
     .data(data)
     .enter()
     .append("circle")
@@ -89,21 +94,21 @@ d3.csv("data/gapminder_combined.csv").then((raw_data) => {
     .attr("r", (d) => radiusScale(d.population))
     .attr("fill", (d) => colorScale(d.region))
     .attr("stroke", "#fff")
-    .style("stroke-width", 0.7)
-    .on("mousemove", function (event, d, index) {
-      tooltip
-        .style("left", event.pageX + "px")
-        .style("top", event.pageY - 50 + "px")
-        .style("display", "block")
-        .html(`<div class="bubble">${d.country}, ${d.life_expectancy}</div>`);
-      //// html이기 때문에 스타일링을 css에서 하고 class로 정의해서 가져오면 자유롭게 스타일링을 할 수 있음
+    .style("stroke-width", 0.7);
+  // .on("mousemove", function (event, d, index) {
+  //   tooltip
+  //     .style("left", event.pageX + "px")
+  //     .style("top", event.pageY - 50 + "px")
+  //     .style("display", "block")
+  //     .html(`<div class="bubble">${d.country}, ${d.life_expectancy}</div>`);
+  //   //// html이기 때문에 스타일링을 css에서 하고 class로 정의해서 가져오면 자유롭게 스타일링을 할 수 있음
 
-      d3.select(this).style("stroke-width", 2).attr("stroke", "#111");
-    })
-    .on("mouseout", function () {
-      tooltip.style("display", "none");
-      d3.select(this).style("stroke-width", 0.7).attr("stroke", "#fff");
-    });
+  //   d3.select(this).style("stroke-width", 2).attr("stroke", "#111");
+  // })
+  // .on("mouseout", function () {
+  //   tooltip.style("display", "none");
+  //   d3.select(this).style("stroke-width", 0.7).attr("stroke", "#fff");
+  // });
 
   xAxisText = svg
     .append("text")
@@ -143,6 +148,126 @@ d3.csv("data/gapminder_combined.csv").then((raw_data) => {
     .attr("y", (d, i) => height - margin.bottom - 53 - 25 * i + 15)
     .text((d) => d)
     .attr("class", "legend-texts");
+
+  // Button Europe
+  d3.select("#button-europe").on("click", () => {
+    europeSelected = !europeSelected;
+    africaSelected = false;
+    usSelected = false;
+    singaporeSelected = false;
+
+    if (europeSelected) {
+      d3.select("#text-desc").text(
+        "Life expectancy_ highest: Iceland, lowest: Azerbaijan / GDP per capita_highest: Luxembourg, lowest: Ukraine"
+      );
+    } else {
+      d3.select("#text-desc").text("");
+    }
+
+    d3.select("button-europe").classed("button-clicked", europeSelected);
+    d3.select("button-africa").classed("button-clicked", false);
+    d3.select("button-us").classed("button-clicked", false);
+    d3.select("button-singapore").classed("button-clicked", false);
+
+    circles.attr("fill", (d) => {
+      if (europeSelected) {
+        return d.region == "europe" ? colorScale(d.region) : "rgba(0,0,0,0.1)";
+      } else {
+        return colorScale(d.region);
+      }
+    });
+  });
+
+  // Button Africa
+  d3.select("#button-africa").on("click", () => {
+    africaSelected = !africaSelected;
+    europeSelected = false;
+    usSelected = false;
+    singaporeSelected = false;
+
+    if (africaSelected) {
+      d3.select("#text-desc").text(
+        "Life expectancy_highest: Algeria lowest: Lesotho / GDP per capita_highest: Mauritius, lowest: Burundi"
+      );
+    } else {
+      d3.select("#text-desc").text("");
+    }
+
+    d3.select("button-africa").classed("button-clicked", africaSelected);
+    d3.select("button-europe").classed("button-clicked", false);
+    d3.select("button-us").classed("button-clicked", false);
+    d3.select("button-singapore").classed("button-clicked", false);
+
+    circles.attr("fill", (d) => {
+      if (africaSelected) {
+        return d.region == "africa" ? colorScale(d.region) : "rgba(0,0,0,0.1)";
+      } else {
+        return colorScale(d.region);
+      }
+    });
+  });
+
+  // Button US
+  d3.select("#button-us").on("click", () => {
+    usSelected = !usSelected;
+    europeSelected = false;
+    africaSelected = false;
+    singaporeSelected = false;
+
+    if (usSelected) {
+      d3.select("#text-desc").text(
+        "Life expectancy: 79.12 / Income: 65340 / Population: 338289857"
+      );
+    } else {
+      d3.select("#text-desc").text("");
+    }
+
+    d3.select("button-us").classed("button-clicked", usSelected);
+    d3.select("button-europe").classed("button-clicked", false);
+    d3.select("button-africa").classed("button-clicked", false);
+    d3.select("button-singapore").classed("button-clicked", false);
+
+    circles.attr("fill", (d) => {
+      if (usSelected) {
+        return d.country == "United States"
+          ? colorScale(d.region)
+          : "rgba(0,0,0,0.1)";
+      } else {
+        return colorScale(d.region);
+      }
+    });
+  });
+
+  // Button Singapore
+  d3.select("#button-singapore").on("click", () => {
+    singaporeSelected = !singaporeSelected;
+    europeSelected = false;
+    africaSelected = false;
+    usSelected = false;
+
+    if (singaporeSelected) {
+      d3.select("#text-desc").text(
+        "Life expectancy: 85.26 / Income: 112846 / Population: 5975689"
+      );
+    } else {
+      d3.select("#text-desc").text("");
+    }
+
+    d3.select("button-singapore").classed("button-clicked", singaporeSelected);
+    d3.select("button-europe").classed("button-clicked", false);
+    d3.select("button-africa").classed("button-clicked", false);
+    d3.select("button-us").classed("button-clicked", false);
+
+    circles.attr("fill", (d) => {
+      if (singaporeSelected) {
+        return d.country == "Singapore"
+          ? colorScale(d.region)
+          : "rgba(0,0,0,0.1)";
+      } else {
+        return colorScale(d.region);
+      }
+    });
+  });
 });
 
 // resize

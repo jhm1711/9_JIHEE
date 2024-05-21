@@ -20,7 +20,7 @@ const yScale = d3.scaleLinear().range([height - margin.bottom, margin.top]);
 const radiusScale = d3.scaleSqrt().range([0, 55]);
 const colorScale = d3
   .scaleOrdinal()
-  .range(["#8160C8", "#FFA602", "#CDC0E4", "#cfcfcf"]); // #ccc
+  .range(["#cfcfcf", "#8160C8", "#CDC0E4", "#FFA602"]); // #ccc
 
 // axis
 const xAxis = d3

@@ -54,7 +54,7 @@ h1 {
 
 .tooltip {
   position: absolute;
-  background-color: #000000;
+  background-color: #ffffff;
   font-size: 26px;
   font-weight: 400;
   padding: 0px 6px;
@@ -75,22 +75,32 @@ h1 {
 
 .button-container button {
   cursor: pointer;
-  border: 1px solid black;
+  border: 1px solid rgb(202, 202, 202);
   background-color: rgba(0, 0, 0, 0);
   border-radius: 3px;
 }
-/* .button-container button:hover {
+.button-container button:hover {
   background-color: rgba(0, 0, 0, 0.13);
-} */
+}
 
 .button-clicked {
   background-color: #111 !important;
   color: #fff;
 }
-/* .button-released {
+.button-released {
   background-color: rgba(0, 0, 0, 0);
   color: #000;
-} */
+}
+
+.buttons {
+  font-family: "DM Sans", sans-serif;
+}
+
+#text-desc {
+  font-family: "DM Sans", sans-serif;
+  position: relative;
+  left: 280px;
+}
 
 .bubble {
   color: #fff;
